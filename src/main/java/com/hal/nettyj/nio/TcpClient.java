@@ -110,8 +110,6 @@ public class TcpClient {
     } finally {
       connected.countDown();
     }
-
-
   }
 
   private void handleReadable(SelectionKey key) {

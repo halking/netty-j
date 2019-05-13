@@ -102,11 +102,15 @@ public class TcpServer {
   }
 
   private void handleReadable(SelectionKey key) {
-    //Get client channel registered
-    SocketChannel clientRegistered = (SocketChannel) key.channel();
-    ByteBuffer readBuffer = CodecUtil.read(clientRegistered);
-
     try {
+      //Get client channel registered
+      SocketChannel clientRegistered = (SocketChannel) key.channel();
+      if (clientRegistered == null) {
+        key.cancel();
+        clientRegistered.close();
+      }
+
+      ByteBuffer readBuffer = CodecUtil.read(clientRegistered);
       if (readBuffer == null) {
         log.info("断开连接");
         clientRegistered.register(selector, 0);

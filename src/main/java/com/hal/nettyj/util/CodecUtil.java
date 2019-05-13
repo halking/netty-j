@@ -11,12 +11,14 @@ import java.nio.charset.StandardCharsets;
  */
 public class CodecUtil {
 
+  private Integer size = 0;
+
   public static ByteBuffer read(SocketChannel channel) {
     // 注意，不考虑拆包的处理
     ByteBuffer buffer = ByteBuffer.allocate(1024);
     try {
       int count = channel.read(buffer);
-      if (count == -1) {
+      if (count <= 0) {
         return null;
       }
     } catch (IOException e) {
@@ -28,8 +30,9 @@ public class CodecUtil {
   public static void write(SocketChannel channel, String content) {
     try {
       // 写入 Buffer
-      ByteBuffer buffer = ByteBuffer.allocate(1024);
-      buffer.put(content.getBytes(StandardCharsets.UTF_8));
+      byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+      ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
+      buffer.put(bytes);
 
       buffer.flip();
       // 写入 Channel, 注意，不考虑写入超过 Channel 缓存区上限。

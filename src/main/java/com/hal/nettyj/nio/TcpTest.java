@@ -24,7 +24,7 @@ public class TcpTest {
 
 //    Scanner scanner = new Scanner(System.in);
 
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 10; i++) {
       client.send("Hello world>>>>" + i);
       Thread.sleep(1000L);
     }
